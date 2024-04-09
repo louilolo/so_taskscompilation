@@ -1,2 +1,2 @@
-# Sistemas Operacionais
-Coletânea de códigos para trabalhos de Sistemas Operacionais
+# Atividades - Sistemas Operacionais
+Coletânea de códigos para trabalhos de SO
