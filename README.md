@@ -9,3 +9,4 @@ Coletânea de códigos para trabalhos de SO
 repetir) e implementar em C e Assembly
 utilizando chamadas de sistemas e
 apontando quais serão utilizadas
+- `Tarefa 2`: Implematação de concorrência e sincronismo através da criação de processos via comando fork e com o uso de threads. 
