@@ -4,7 +4,7 @@
 #include <fcntl.h>
 
 int main (){
-    char palavra[50], caractere;
+    char palavra[50], caractere[2];
     char* arquivo;
     int bytes, fd, tamanhopalavra, contador, letraigual=0, ocorrencias;
 
@@ -32,9 +32,9 @@ int main (){
         perror("erro ao abrir arquivo");
         exit(1);
     }
-    while(read(arquivo, caractere, sizeof(char))!=-1){
-        if(caractere!=' '&&caractere!='\0'&&caractere!='\n'&&caractere!='\t'){
-            if(caractere==palavra[contador]){
+    while(read(fd, caractere, sizeof(char))>0){
+        if(caractere[0]!=' '&&caractere[0]!='\0'&&caractere[0]!='\n'&&caractere[0]!='\t'){
+            if(caractere[0]==palavra[contador]){
                 letraigual++;
                 contador++;
             }
@@ -48,10 +48,12 @@ int main (){
         }
     }
 
-    close(arquivo);
+    close(fd);
 
-    char msg3[] = "numero de ocorrencias da palavra solicitada = " + itoa(ocorrencias);
+    
+    char msg3[] = "numero de ocorrencias da palavra solicitada = ";
     write(STDERR_FILENO, msg3, sizeof(msg3)-1);
+    printf("%d", ocorrencias);
 
 
     return 0;
