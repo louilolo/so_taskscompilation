@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include<stdio.h>
+#include <time.h>
 
 // Function to find the waiting time for all processes
 int waitingtime(int proc[], int n,
@@ -43,11 +45,18 @@ int avgtime( int proc[], int n, int burst_time[]) {
 }
 // main function
 int main() {
+   srand(time(NULL));   // Initialization, should only be called once.
    //process id's
-   int proc[] = { 1, 2, 3};
-   int n = sizeof proc / sizeof proc[0];
+   int proc[30];
    //Burst time of all processes
-   int burst_time[] = {5, 8, 12};
+   int burst_time[30];
+   //initialization
+   int possible_times[] = {5, 8, 12};
+   for(int i=0; i<30; i++){
+      proc[i] = i+1;
+      burst_time[i] = possible_times[rand()%3];
+   }
+   int n = sizeof proc / sizeof proc[0];
    avgtime(proc, n, burst_time);
    return 0;
 }
