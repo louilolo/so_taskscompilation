@@ -29,7 +29,7 @@ _start:
     mov rdx, len1               ;Tamanho
     int 0x80                   ;syscall
 
-    ;le a palavra    
+    ;le a palavra
     mov rax, 3    ;SYS_READ
     mov rbx, 0    ;STD_IN
     mov rcx, palavra ;Variavel que recebe input
@@ -56,7 +56,7 @@ leitura_loop:
 
 if:
     ;ve se eh o fim da palavra
-    cmp caractere, 32 ;ve se eh espaco 
+    cmp caractere, 32 ;ve se eh espaco
     je else
     cmp caractere, 9 ;ve se eh \t
     je else
@@ -66,7 +66,9 @@ if:
     je else
 
     ;compara caracteres
-    cmp [caractere], [palavra + contador] 
+    mov rsi, palavra      ; Coloca o endereço de 'palavra' em rsi
+    add rsi, contador     ; Adiciona o valor de 'contador' ao endereço
+    cmp byte [caractere], byte [rsi] 
     jnz nao_iguais
     inc contador
     jmp else
@@ -108,3 +110,4 @@ fim:
     mov rax, 1
     mov rbx, 0
     int 0x80
+

@@ -59,9 +59,6 @@ void selectionSort(int processos[30], int times[30]){
       processos[i] = processos[min];
       processos[min] = aux;
    }
-   for (int i=0; i<30; i++){
-      printf("%d, %d\n", processos[i], times[i]);
-}
 }
 // main function
 int main() {
