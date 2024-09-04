@@ -1,0 +1,93 @@
+section .data
+    ; Dados globais e constantes
+
+section .bss
+    ; Dados não inicializados
+
+section .text
+    global _start
+
+_start:
+    ; Ponto de entrada do programa
+
+    ; Código do programa
+
+    ; Saída do programa
+    mov eax, 1      ; Código da syscall para exit
+    xor ebx, ebx    ; Código de saída (0)
+    int 0x80        ; Chamada de interrupção
+
+//////////////////////
+
+section .data
+    dirname db "imgs_artigo", 0
+    mode    dd 0755
+
+section .text
+global _start
+
+_start:
+    ; Chamada do sistema mkdir
+    mov eax, 39         ; syscall número 39 é mkdir
+    mov ebx, dirname    ; ponteiro para o nome do diretório
+    mov ecx, mode       ; modo de permissão
+    int 0x80            ; faz a syscall
+
+    ; Verifica o erro
+    cmp eax, 0          ; Verifica se a syscall foi bem-sucedida (eax = 0)
+    jl erro_mkdir       ; Se menor que 0, ocorreu um erro
+//////////////////////
+
+section .bss
+    dirent resb 256        ; buffer para armazenar entradas de diretório
+
+section .text
+
+    ; Chamada do sistema open para abrir o diretório
+    mov eax, 5              ; syscall número 5 é open
+    mov ebx, "."            ; nome do diretório atual
+    mov ecx, 0              ; modo de leitura
+    int 0x80                ; faz a syscall
+    mov esi, eax            ; salvar o descritor de arquivo
+
+    ; Loop de leitura das entradas do diretório
+le_diretorio:
+    mov eax, 141            ; syscall número 141 é getdents
+    mov ebx, esi            ; descritor de arquivo do diretório
+    mov ecx, dirent         ; buffer para armazenar as entradas do diretório
+    mov edx, 256            ; tamanho do buffer
+    int 0x80                ; faz a syscall
+    cmp eax, 0              ; Verifica se terminou a leitura
+    jle fim_leitura         ; Se eax <= 0, termina a leitura
+
+    ; Processar cada entrada aqui (verificar extensão .eps)
+    ; (código para verificar e mover arquivos)
+
+    jmp le_diretorio
+
+fim_leitura:
+    ; Fechar o diretório
+    mov eax, 6              ; syscall número 6 é close
+    mov ebx, esi            ; descritor de arquivo do diretório
+    int 0x80                ; faz a syscall
+
+//////////
+
+section .data
+    eps_ext db ".eps", 0
+    new_path db "imgs_artigo/", 0
+
+section .text
+
+    ; Verifica se a extensão do arquivo é .eps
+    ; (Pseudocódigo)
+    ; if (strstr(entry->d_name, ".eps")) { ... }
+
+    ; Construir o novo caminho
+    ; (Pseudocódigo) Copiar nome do arquivo para new_path
+
+    ; Mover o arquivo
+    mov eax, 38             ; syscall número 38 é rename
+    mov ebx, dirent+10      ; nome do arquivo original (ajustar conforme a estrutura dirent)
+    mov ecx, new_path       ; novo caminho para o arquivo
+    int 0x80                ; faz a syscall
