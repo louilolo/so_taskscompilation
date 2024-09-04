@@ -19,12 +19,12 @@ sem_t s[N];    // Um semáforo por filósofo
 
 void think(int i) {
     printf("Filósofo %d está pensando.\n", i);
-    // Simula o filósofo pensando
+    usleep(rand() % 500000);  // Atraso aleatório entre 0 e 0.5 segundos
 }
 
 void eat(int i) {
     printf("Filósofo %d está comendo.\n", i);
-    // Simula o filósofo comendo
+    usleep(rand() % 500000);  // Atraso aleatório entre 0 e 0.5 segundos
 }
 
 void test(int i) {
@@ -36,11 +36,11 @@ void test(int i) {
 
 void take_forks(int i) {
     sem_wait(&mutex);       // Entra na região crítica
-    estado[i] = HUNGRY;      // Registra que o filósofo está faminto
-    test(i);                // Tenta pegar dois garfos
-    sem_post(&mutex);       // Sai da região crítica
+    estado[i] = HUNGRY;    // Registra que o filósofo está faminto
+    test(i);               // Tenta pegar dois garfos
+    sem_post(&mutex);      // Sai da região crítica
 
-    sem_wait(&s[i]);        // Bloqueia se os garfos não foram pegos
+    sem_wait(&s[i]);       // Bloqueia se os garfos não foram pegos
 
     // Se não conseguir pegar o segundo garfo
     if (estado[i] != EATING) {
@@ -53,16 +53,16 @@ void take_forks(int i) {
         sem_post(&mutex);   // Sai da região crítica
 
         // Aguarda por um tempo aleatório
-        usleep(rand() % 1000);  // Aguarda por um tempo aleatório (até 1 milissegundo)
+        usleep(rand() % 1000000);  // Aguarda por um tempo aleatório (até 1 segundo)
     }
 }
 
 void put_forks(int i) {
     sem_wait(&mutex);       // Entra na região crítica
-    estado[i] = THINKING;    // O filósofo acabou de comer
-    test(LEFT);             // Vê se o vizinho da esquerda pode comer agora
-    test(RIGHT);            // Vê se o vizinho da direita pode comer agora
-    sem_post(&mutex);       // Sai da região crítica
+    estado[i] = THINKING;  // O filósofo acabou de comer
+    test(LEFT);            // Vê se o vizinho da esquerda pode comer agora
+    test(RIGHT);           // Vê se o vizinho da direita pode comer agora
+    sem_post(&mutex);      // Sai da região crítica
 }
 
 void* philosopher(void* num) {
